@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giggle Grub - Fun Food for Kids!</title>
+    <meta name="description" content="Giggle Grub is a playful restaurant game for children. Let kids explore food, build orders, and enjoy animated fun in a safe, educational environment.">
+    <meta name="keywords" content="kids game, restaurant game, educational app, iOS app, children's app, food game">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gigglegrub.com/">
+    <meta property="og:title" content="Giggle Grub - Fun Food for Kids!">
+    <meta property="og:description" content="A playful restaurant game where kids can explore food, build orders, and enjoy animated fun!">
+    <meta property="og:image" content="assets/APP_ICON.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gigglegrub.com/">
+    <meta property="twitter:title" content="Giggle Grub - Fun Food for Kids!">
+    <meta property="twitter:description" content="A playful restaurant game where kids can explore food, build orders, and enjoy animated fun!">
+    <meta property="twitter:image" content="assets/APP_ICON.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/APP_ICON.png">
+    <link rel="apple-touch-icon" href="assets/APP_ICON.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #FF6B6B;
+            --secondary-color: #4ECDC4;
+            --accent-color: #FFE66D;
+            --text-dark: #2D3436;
+            --text-light: #636E72;
+            --bg-light: #FFF5F5;
+            --bg-white: #FFFFFF;
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.15);
+            --border-radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fredoka', cursive;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background decoration */
+        .bg-decoration {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-food {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 8rem 2rem 4rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--text-dark);
+            box-shadow: 0 4px 15px rgba(255, 230, 109, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 230, 109, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .phone-mockup {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            background: white;
+            border-radius: 40px;
+            padding: 10px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #f0f0f0;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
+        }
+
+        .app-preview {
+            text-align: center;
+            color: white;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .food-item {
+            font-size: 3rem;
+            animation: bounce 2s infinite;
+            animation-delay: calc(var(--i) * 0.1s);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-light);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Menu Showcase */
+        .menu-showcase {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .menu-items {
+            max-width: 1200px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+
+        .menu-item-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item-name {
+            font-size: 1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Screenshots Section */
+        .screenshots {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .screenshots-container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .screenshot {
+            background: var(--bg-light);
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.05);
+        }
+
+        .screenshot-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            overflow: hidden;
+        }
+
+        .screenshot-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        /* Download Section */
+        .download {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+        }
+
+        .download h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .download p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+        }
+
+        .app-store-button {
+            display: inline-block;
+            background: black;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: transform 0.3s;
+        }
+
+        .app-store-button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content {
+                order: 2;
+            }
+
+            .hero-visual {
+                order: 1;
+            }
+
+            .phone-mockup {
+                max-width: 300px;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-items {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Language Badge */
+        .language-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 4rem 2rem;
+            background: var(--bg-light);
+        }
+
+        .stats-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Decoration -->
+    <div class="bg-decoration">
+        <span class="floating-food" style="left: 10%; animation-delay: 0s;">🍕</span>
+        <span class="floating-food" style="left: 20%; animation-delay: 2s;">🍔</span>
+        <span class="floating-food" style="left: 30%; animation-delay: 4s;">🥗</span>
+        <span class="floating-food" style="left: 40%; animation-delay: 6s;">🍎</span>
+        <span class="floating-food" style="left: 50%; animation-delay: 8s;">🥕</span>
+        <span class="floating-food" style="left: 60%; animation-delay: 10s;">🍓</span>
+        <span class="floating-food" style="left: 70%; animation-delay: 12s;">🥛</span>
+        <span class="floating-food" style="left: 80%; animation-delay: 14s;">🍪</span>
+        <span class="floating-food" style="left: 90%; animation-delay: 16s;">🌟</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/APP_ICON.png" alt="Giggle Grub Logo">
+                <span>Giggle Grub</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#screenshots">Screenshots</a></li>
+                <li><a href="#download">Download</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content animate-in">
+                <h1>Giggle Grub</h1>
+                <p class="tagline">Fun Food for Kids!</p>
+                <p>A playful restaurant game where children can explore delicious food, build their own orders, and enjoy animated fun in a safe, educational environment.</p>
+
+                <div class="cta-buttons">
+                    <a href="#download" class="btn btn-primary">
+                        <span>🎮</span>
+                        <span>Play Now</span>
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <span>✨</span>
+                        <span>Learn More</span>
+                    </a>
+                </div>
+
+                <div class="language-badge">
+                    <span>🌍</span>
+                    <span>Available in English & German</span>
+                </div>
+            </div>
+
+            <div class="hero-visual animate-in">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <img src="assets/ORDER_PAGE.png" alt="Giggle Grub App Screenshot" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">31</div>
+                <div class="stat-label">Menu Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">8</div>
+                <div class="stat-label">Food Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">58%</div>
+                <div class="stat-label">Healthy Options</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2>Features Kids Love</h2>
+            <p>Designed with fun and learning in mind</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Colorful Interface</h3>
+                <p>Bright, engaging visuals designed specifically for children with intuitive touch controls</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎵</div>
+                <h3>Sound Effects</h3>
+                <p>Delightful sound effects and haptic feedback make every interaction fun and rewarding</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3>Multilingual</h3>
+                <p>Available in English and German with automatic language detection and easy switching</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Universal Design</h3>
+                <p>Perfectly optimized for iPhone and iPad with responsive layouts for all screen sizes</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🎉</div>
+                <h3>Animations</h3>
+                <p>Flying food animations and celebration effects make ordering food a magical experience</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🥗</div>
+                <h3>Educational</h3>
+                <p>Learn about different foods with a balanced mix of healthy options and kid favorites</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Showcase -->
+    <section id="menu" class="menu-showcase">
+        <div class="section-header" style="color: white;">
+            <h2>Explore Our Menu</h2>
+            <p style="color: rgba(255,255,255,0.9);">31 delicious items across 8 categories</p>
+        </div>
+
+        <div class="menu-items">
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍔</div>
+                <div class="menu-item-name">Burgers</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍕</div>
+                <div class="menu-item-name">Pizza</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍗</div>
+                <div class="menu-item-name">Chicken</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🥗</div>
+                <div class="menu-item-name">Healthy</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍟</div>
+                <div class="menu-item-name">Sides</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍎</div>
+                <div class="menu-item-name">Fruits</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🥤</div>
+                <div class="menu-item-name">Drinks</div>
+            </div>
+            <div class="menu-item">
+                <div class="menu-item-emoji">🍰</div>
+                <div class="menu-item-name">Desserts</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="section-header">
+            <h2>App Screenshots</h2>
+            <p>See Giggle Grub in action</p>
+        </div>
+
+        <div class="screenshots-container">
+            <div class="screenshot">
+                <div class="screenshot-image">
+                    <img src="assets/ORDER_PAGE.png" alt="Giggle Grub Menu Screen" />
+                </div>
+            </div>
+            <div class="screenshot">
+                <div class="screenshot-image">
+                    <div style="text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🛒</div>
+                        <div>Shopping Cart</div>
+                    </div>
+                </div>
+            </div>
+            <div class="screenshot">
+                <div class="screenshot-image">
+                    <div style="text-align: center;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+                        <div>Order Complete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download">
+        <h2>Ready to Play?</h2>
+        <p>Download Giggle Grub now and let the food fun begin!</p>
+
+        <a href="https://apps.apple.com" class="app-store-button">
+            <span>📱 Download on the App Store</span>
+        </a>
+
+        <div style="margin-top: 2rem; color: rgba(255,255,255,0.8);">
+            <p>Coming soon to the App Store</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">iOS 15.0+ required • iPhone & iPad compatible</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <ul class="footer-links">
+                <li><a href="#privacy">Privacy Policy</a></li>
+                <li><a href="#terms">Terms of Service</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div class="social-links">
+                <a href="#" class="social-link">𝕏</a>
+                <a href="#" class="social-link">f</a>
+                <a href="#" class="social-link">in</a>
+            </div>
+
+            <p style="color: rgba(255,255,255,0.6);">
+                © 2024 Giggle Grub. All rights reserved.<br>
+                Made with ❤️ for kids everywhere
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all feature cards and menu items
+        document.querySelectorAll('.feature-card, .menu-item, .screenshot').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(el);
+        });
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add hover effect to food items in hero
+        document.querySelectorAll('.food-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.2) rotate(10deg)';
+            });
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#gradient)" />
+
+  <!-- Star in center -->
+  <path d="M256 140 L280 200 L345 200 L295 240 L315 300 L256 260 L197 300 L217 240 L167 200 L232 200 Z" fill="#FFE66D" stroke="#FFC700" stroke-width="3"/>
+
+  <!-- Food icons in circle -->
+  <text x="256" y="150" font-family="Arial" font-size="40" text-anchor="middle" fill="#FF6B6B">🍕</text>
+  <text x="340" y="200" font-family="Arial" font-size="40" text-anchor="middle" fill="#4ECDC4">🍔</text>
+  <text x="340" y="310" font-family="Arial" font-size="40" text-anchor="middle" fill="#95E1D3">🥗</text>
+  <text x="256" y="360" font-family="Arial" font-size="40" text-anchor="middle" fill="#F38181">🍎</text>
+  <text x="172" y="310" font-family="Arial" font-size="40" text-anchor="middle" fill="#AA96DA">🥕</text>
+  <text x="172" y="200" font-family="Arial" font-size="40" text-anchor="middle" fill="#FCB6D0">🍓</text>
+
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>
